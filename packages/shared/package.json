@@ -4,14 +4,17 @@
   "private": true,
   "exports": {
     "./components/*": "./components/*.tsx",
-    "./lib/utils/*": "./utils/*.ts",
-    "./ui.global.css": "./ui.global.css"
+    "./lib/*": "./lib/*.ts",
+    "./global.css": "./global.css"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
