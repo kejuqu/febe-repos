@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use, useCallback } from "react";
 import "./index.css";
 
 interface SSEEvent {
   type: string;
   data: any;
-  timestamp: number;
+  timestamp?: number;
 }
 
 interface SSERequest {
@@ -22,12 +22,25 @@ interface SSERequest {
   options: { thinking: boolean };
 }
 
-const SSEComponent: React.FC = () => {
+export const SSEDemo: React.FC = () => {
   const [events, setEvents] = useState<SSEEvent[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
+  const [renderTxt, setRenderTxt] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // 滚动到底部的函数
+  const scrollToBottom = useCallback(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, []);
+
+  // 监听内容变化
+  useEffect(() => {
+    scrollToBottom();
+  }, [renderTxt, scrollToBottom]);
 
   const requestData: SSERequest = {
     chat_id: "19a9a0a5-df82-8f0d-8000-09145e953ddf",
@@ -47,6 +60,7 @@ const SSEComponent: React.FC = () => {
       setIsLoading(true);
       setError(null);
       setEvents([]);
+      setRenderTxt("");
 
       // 使用 Fetch API 发送 POST 请求
       const response = await fetch("http://localhost:8080/sse", {
@@ -84,39 +98,45 @@ const SSEComponent: React.FC = () => {
               setIsConnected(false);
               break;
             }
+            let event = "";
+            let eventData = { content: "" };
 
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split("\n");
 
             // 保留最后一行不完整的消息
             buffer = lines.pop() || "";
+            console.log("lines", lines);
 
-            for (const line of lines) {
+            for (const item of lines) {
+              const line = item.trim();
+
               if (line.startsWith("event:")) {
-                const eventType = line.substring(6).trim();
-
-                // 读取下一行（数据行）
-                const { value: nextValue, done: nextDone } =
-                  await reader.read();
-                if (nextDone) break;
-
-                const dataLine = decoder.decode(nextValue, { stream: false });
-                if (dataLine.startsWith("data:")) {
-                  const jsonData = dataLine.substring(5).trim();
-
-                  try {
-                    const data = JSON.parse(jsonData);
-                    const newEvent: SSEEvent = {
-                      type: eventType,
-                      data,
-                      timestamp: Date.now(),
-                    };
-
-                    setEvents((prev) => [...prev, newEvent]);
-                  } catch (e) {
-                    console.error("Error parsing JSON:", e);
-                  }
+                event = line.substring(6).trim(); // 获取事件名称
+              } else if (line.startsWith("data:")) {
+                const jsonStr = line.split("data:")[1] || "{}"; // 获取数据部分
+                try {
+                  eventData = JSON.parse(jsonStr) as { content: string };
+                } catch (e) {
+                  console.error("JSON解析错误:", e);
                 }
+              } else if (line === "") {
+                // 空行表示一个事件块结束
+                if (event === "chunk" && eventData) {
+                  setEvents((prev) => [
+                    ...prev,
+                    {
+                      type: event,
+                      data: eventData,
+                    },
+                  ]);
+
+                  const { content } = eventData;
+                  setRenderTxt((prev) => prev + content);
+                }
+                // 重置
+                event = null;
+                eventData = null;
               }
             }
           }
@@ -136,43 +156,16 @@ const SSEComponent: React.FC = () => {
     }
   };
 
-  const disconnectSSE = () => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-      eventSourceRef.current = null;
-    }
-    setIsConnected(false);
-  };
+  console.log("events: ", events);
 
   const clearEvents = () => {
     setEvents([]);
   };
 
-  const getEventColor = (type: string) => {
-    switch (type) {
-      case "connected":
-        return "#10b981"; // green
-      case "start":
-        return "#3b82f6"; // blue
-      case "chunk":
-        return "#6b7280"; // gray
-      case "end":
-        return "#8b5cf6"; // purple
-      case "error":
-        return "#ef4444"; // red
-      default:
-        return "#6b7280"; // gray
-    }
-  };
-
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString();
-  };
-
   return (
     <div className="sse-container">
       <div className="sse-header">
-        <h1>SSE 客户端</h1>
+        <h1 className="!text-foreground">SSE 客户端</h1>
         <div className="status-indicator">
           <div
             className={`status-dot ${isConnected ? "connected" : "disconnected"}`}
@@ -187,15 +180,7 @@ const SSEComponent: React.FC = () => {
           disabled={isConnected || isLoading}
           className="btn btn-primary"
         >
-          {isLoading ? "连接中..." : "连接 SSE"}
-        </button>
-
-        <button
-          onClick={disconnectSSE}
-          disabled={!isConnected}
-          className="btn btn-secondary"
-        >
-          断开连接
+          {isLoading ? "连接中..." : "模拟 SSE"}
         </button>
 
         <button onClick={clearEvents} className="btn btn-outline">
@@ -213,35 +198,18 @@ const SSEComponent: React.FC = () => {
         <h3>事件流 ({events.length} 个事件)</h3>
 
         {events.length === 0 ? (
-          <div className="empty-state">
+          <div className="empty-state h-[66dvh]">
             <p>暂无事件，点击"连接 SSE"开始接收数据</p>
           </div>
         ) : (
-          <div className="events-list">
-            {events.map((event, index) => (
-              <div key={index} className="event-item">
-                <div className="event-header">
-                  <span
-                    className="event-type"
-                    style={{ backgroundColor: getEventColor(event.type) }}
-                  >
-                    {event.type}
-                  </span>
-                  <span className="event-time">
-                    {formatTimestamp(event.timestamp)}
-                  </span>
-                </div>
-
-                <div className="event-data">
-                  <pre>{JSON.stringify(event.data, null, 2)}</pre>
-                </div>
-              </div>
-            ))}
+          <div className="text-background overflow-auto h-[66dvh]">
+            {renderTxt}
+            <div ref={scrollRef} />
           </div>
         )}
       </div>
 
-      <div className="request-info">
+      <div className="text-foreground">
         <details>
           <summary>请求数据</summary>
           <pre>{JSON.stringify(requestData, null, 2)}</pre>
@@ -250,5 +218,3 @@ const SSEComponent: React.FC = () => {
     </div>
   );
 };
-
-export default SSEComponent;

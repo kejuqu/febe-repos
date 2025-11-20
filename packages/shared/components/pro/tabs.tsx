@@ -6,6 +6,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/shared/components/ui/tabs";
+import { cn } from "@repo/shared/lib/utils";
 
 type TabItem = React.ComponentProps<typeof TabsTrigger> & {
   label: React.ReactNode;
@@ -27,9 +28,14 @@ export function TabsPro({
   return (
     <Tabs {...tabsProps}>
       <TabsList {...listProps}>
-        {items.map((item) => (
-          <TabsTrigger key={item.value} value={item.value}>
-            {item.label}
+        {items.map(({ label, value, className = "", ...item }) => (
+          <TabsTrigger
+            key={value}
+            className={cn("cursor-pointer", className)}
+            value={value}
+            {...item}
+          >
+            {label}
           </TabsTrigger>
         ))}
       </TabsList>
