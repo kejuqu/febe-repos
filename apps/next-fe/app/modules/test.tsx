@@ -10,6 +10,7 @@
 // } from "@repo/shared/components/ui/card";
 import { TabsPro } from "@repo/shared/components/pro/tabs";
 import { SSEDemo } from "./sse-demo/sse-demo";
+import { WebSocketDemo } from "./websocket-demo/websocket-demo";
 
 export function Test() {
   const items = [
@@ -21,7 +22,7 @@ export function Test() {
     {
       label: "websocket",
       value: "tab2",
-      content: "Tab 2 content",
+      content: <WebSocketDemo />,
     },
     {
       label: "Tab 3",
