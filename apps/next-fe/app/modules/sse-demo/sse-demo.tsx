@@ -63,7 +63,7 @@ export const SSEDemo: React.FC = () => {
       setRenderTxt("");
 
       // 使用 Fetch API 发送 POST 请求
-      const response = await fetch("http://localhost:8080/sse", {
+      const response = await fetch("http://localhost:8080/chats/sse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
