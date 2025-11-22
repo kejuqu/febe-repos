@@ -1,4 +1,3 @@
-
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -11,9 +10,9 @@ import { ChatService } from './chat.service';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST'],
-    credentials: true,
+    // credentials: true,
   },
 })
 export class ChatGateway {
@@ -27,6 +26,7 @@ export class ChatGateway {
     @MessageBody() data: { username: string; content: string },
     @ConnectedSocket() client: Socket,
   ): void {
+    console.log('client:', client);
     const newMessage = this.chatService.createMessage(
       data.username,
       data.content,

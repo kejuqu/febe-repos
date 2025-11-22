@@ -11,6 +11,7 @@
 import { TabsPro } from "@repo/shared/components/pro/tabs";
 import { SSEDemo } from "./sse-demo/sse-demo";
 import { WebSocketDemo } from "./websocket-demo/websocket-demo";
+import { BigDataDemo } from "./webworker-demo/bigdata-demo";
 
 export function Test() {
   const items = [
@@ -21,13 +22,13 @@ export function Test() {
     },
     {
       label: "websocket",
-      value: "tab2",
+      value: "websocket",
       content: <WebSocketDemo />,
     },
     {
-      label: "Tab 3",
-      value: "tab3",
-      content: "Tab 3 content",
+      label: "webworker",
+      value: "webworker",
+      content: <BigDataDemo />,
     },
   ];
 
