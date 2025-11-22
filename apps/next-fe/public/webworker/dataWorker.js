@@ -1,28 +1,28 @@
+import { generateMockData } from "./gen-bigdata"; // 这一步需要 new Worker 的时候指定 type: module
+
 self.onmessage = ({ data }) => {
-  console.log("data: ", data);
   const { type, payload } = data;
 
   switch (type) {
     case "generateAndAggregate": {
       const { count } = payload;
-      const data = Array.from({ length: count }, () => ({
-        value: Math.random() * 100,
-      }));
-      const sum = data.reduce((acc, d) => acc + d.value, 0);
-      const avg = sum / data.length;
+      const bigData = generateMockData(count);
+      console.log("bigData::: ", bigData);
+      const sum = bigData.reduce((acc, d) => acc + d.amount, 0);
+      const avg = sum / bigData.length;
       self.postMessage({ sum, avg });
       break;
     }
     case "aggregate": {
       const { listData } = payload;
-      const sum = listData.reduce((acc, d) => acc + d.value, 0);
+      const sum = listData.reduce((acc, d) => acc + d.amount, 0);
       const avg = sum / listData.length;
       self.postMessage({ sum, avg });
       break;
     }
 
     case "filterHighValue":
-      self.postMessage(payload.filter((x) => x.value > 90));
+      self.postMessage(payload.filter((x) => x.amount > 9000)); // Adjusted for new data structure
       break;
 
     case "unique":

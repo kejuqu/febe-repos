@@ -2,6 +2,28 @@ import { useState } from "react";
 import useWorker from "./use-worker";
 import { Input } from "@repo/shared/components/ui/input";
 
+interface MockDataItem {
+  id: string;
+  amount: number;
+  status: "pending" | "processing" | "success" | "failed";
+  email: string;
+}
+
+// Helper function to generate large data
+const generateMockData = (count: number): MockDataItem[] => {
+  const data: MockDataItem[] = [];
+  const statuses = ["pending", "processing", "success", "failed"] as const;
+  for (let i = 0; i < count; i++) {
+    data.push({
+      id: Math.random().toString(36).substring(2, 10),
+      amount: Math.floor(Math.random() * 10000) + 1,
+      status: statuses[Math.floor(Math.random() * statuses.length)],
+      email: `user${i}@example.com`,
+    });
+  }
+  return data;
+};
+
 export function BigDataDemo() {
   const [result, setResult] = useState<{
     sum: number;
@@ -12,7 +34,7 @@ export function BigDataDemo() {
   const [processingTime, setProcessingTime] = useState<number | null>(null);
   const runWorker = useWorker("/webworker/dataWorker.js");
 
-  const bigCount = 10_000_000;
+  const bigCount = 1_000_000; // Increased for substantial comparison
   const handleProcess = async () => {
     setLoading(true);
     setResult(null);
@@ -30,10 +52,8 @@ export function BigDataDemo() {
         });
       } else {
         // Main thread processing for comparison
-        const bigData = Array.from({ length: bigCount }, () => ({
-          value: Math.random() * 100,
-        }));
-        const sum = bigData.reduce((acc, d) => acc + d.value, 0);
+        const bigData = generateMockData(bigCount);
+        const sum = bigData.reduce((acc, d) => acc + d.amount, 0);
         const avg = sum / bigData.length;
         res = { sum, avg };
       }
