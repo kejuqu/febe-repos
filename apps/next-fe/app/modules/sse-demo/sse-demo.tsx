@@ -135,8 +135,8 @@ export const SSEDemo: React.FC = () => {
                   setRenderTxt((prev) => prev + content);
                 }
                 // 重置
-                event = null;
-                eventData = null;
+                event = "";
+                eventData = { content: "" };
               }
             }
           }
@@ -150,7 +150,9 @@ export const SSEDemo: React.FC = () => {
       processStream();
     } catch (error) {
       console.error("Connection error:", error);
-      setError(`连接失败: ${error.message}`);
+      if (error instanceof Error) {
+        setError(`连接失败: ${error.message}`);
+      }
       setIsLoading(false);
       setIsConnected(false);
     }

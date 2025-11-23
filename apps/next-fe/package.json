@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "next dev --port 3003",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3003",
     "lint": "eslint --max-warnings 0",
-    "check-types": "next typegen && tsc --noEmit"
+    "check-types": "next typegen && tsc --noEmit",
+    "build_docker_image": "docker build -t lekequ/febe-repos_next-app:master -f ./Dockerfile ."
   },
   "dependencies": {
     "@repo/shared": "workspace:*",

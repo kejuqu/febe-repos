@@ -16,6 +16,11 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "build_docker_image": {
+      "inputs": ["apps/nestjs-be/**", "apps/nextjs-fe/**"],
+      "dependsOn": [],
+      "outputs": ["apps/nestjs-be/dist/**", "apps/nextjs-fe/.next/**"]
     }
   }
 }

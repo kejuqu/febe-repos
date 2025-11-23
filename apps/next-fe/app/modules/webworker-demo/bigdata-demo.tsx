@@ -12,12 +12,19 @@ interface MockDataItem {
 // Helper function to generate large data
 const generateMockData = (count: number): MockDataItem[] => {
   const data: MockDataItem[] = [];
-  const statuses = ["pending", "processing", "success", "failed"] as const;
+  const statuses: MockDataItem["status"][] = [
+    "pending",
+    "processing",
+    "success",
+    "failed",
+  ] as const;
   for (let i = 0; i < count; i++) {
     data.push({
       id: Math.random().toString(36).substring(2, 10),
       amount: Math.floor(Math.random() * 10000) + 1,
-      status: statuses[Math.floor(Math.random() * statuses.length)],
+      status: statuses[
+        Math.floor(Math.random() * statuses.length)
+      ] as MockDataItem["status"],
       email: `user${i}@example.com`,
     });
   }
