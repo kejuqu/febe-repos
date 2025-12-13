@@ -1,9 +1,10 @@
 import { defineConfig, type PluginOption } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
+import autoImport from 'unplugin-auto-import/vite';
+import components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import vueRouter from 'unplugin-vue-router/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,13 +12,16 @@ export default defineConfig({
     port: 3004,
   },
   plugins: [
+    vueRouter({
+      /* options */
+    }),
     vue(),
     tailwindcss(),
-    AutoImport({
+    autoImport({
       resolvers: [ElementPlusResolver()],
-    }) as PluginOption,
-    Components({
+    }),
+    components({
       resolvers: [ElementPlusResolver()],
-    }) as PluginOption,
-  ],
+    }),
+  ] as PluginOption[],
 });

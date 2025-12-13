@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  // import AllDemos from './AllDemos.vue';
-  import { ElButton } from 'element-plus';
-
-  function alertInfo() {
-    alert('hello element plus');
-  }
+  import MainHeader from './components/layouts/MainHeader.vue';
+  import MainSidebar from './components/layouts/MainSidebar.vue';
 </script>
 
 <template>
-  <el-button @click="alertInfo">按钮</el-button>
   <!-- <AllDemos /> -->
+  <main-header></main-header>
+  <main class="flex gap-2">
+    <main-sidebar></main-sidebar>
+    <router-view></router-view>
+  </main>
 </template>
 
 <style scoped></style>

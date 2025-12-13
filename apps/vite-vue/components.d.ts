@@ -12,8 +12,18 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Child: typeof import('./src/components/Child.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElMenu: typeof import('element-plus/es')['ElMenu']
+    ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
+    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
+    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
+    ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     Header: typeof import('./src/components/layouts/header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    MainHeader: typeof import('./src/components/layouts/MainHeader.vue')['default']
+    MainSidebar: typeof import('./src/components/layouts/MainSidebar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./src/components/layouts/sidebar.vue')['default']
