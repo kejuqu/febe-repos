@@ -3,6 +3,8 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": ["vite/client", "unplugin-vue-router/client"],
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
 
     "moduleResolution": "bundler",
     /* Linting */
@@ -13,5 +15,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "./typed-router.d.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "./typed-router.d.ts",
+    "src/mock/products.mock.js"
+  ]
 }

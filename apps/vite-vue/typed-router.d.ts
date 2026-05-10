@@ -30,9 +30,16 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/about': RouteRecordInfo<
-      '/about',
-      '/about',
+    '/product-management': RouteRecordInfo<
+      '/product-management',
+      '/product-management',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/upload-product': RouteRecordInfo<
+      '/upload-product',
+      '/upload-product',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -56,9 +63,15 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'src/pages/about.vue': {
+    'src/pages/product-management.vue': {
       routes:
-        | '/about'
+        | '/product-management'
+      views:
+        | never
+    }
+    'src/pages/upload-product.vue': {
+      routes:
+        | '/upload-product'
       views:
         | never
     }

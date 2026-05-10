@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite && npm run mock:watch",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mock:sync": "node ./scripts/update-mock-index.js",
+    "mock:watch": "node ./scripts/update-mock-index.js --watch"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -24,8 +26,11 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@iconify-json/ep": "^1.2.3",
+    "@types/mockjs": "^1.0.10",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.1.2",
     "@vue/tsconfig": "^0.8.1",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^20.3.0",

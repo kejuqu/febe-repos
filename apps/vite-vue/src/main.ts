@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import './style.css';
+import './global.css';
 import App from './App.vue';
 import i18nPlugin from './demos/plugins/i18n';
 import { routes, handleHotUpdate } from 'vue-router/auto-routes';
