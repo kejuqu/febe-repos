@@ -4,6 +4,9 @@ import App from './App.vue';
 import i18nPlugin from './demos/plugins/i18n';
 import { routes, handleHotUpdate } from 'vue-router/auto-routes';
 import { createRouter, createWebHistory } from 'vue-router';
+import './mock/index';
+
+import '@/utils/request/interceptor';
 
 const app = createApp(App);
 

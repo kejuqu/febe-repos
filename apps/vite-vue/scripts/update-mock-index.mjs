@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
+debugger;
 const projectRoot = process.cwd();
 const mockDir = path.join(projectRoot, 'src', 'mock');
 const indexFile = path.join(mockDir, 'index.ts');
@@ -47,6 +48,7 @@ function writeIndex() {
 }
 
 function ensureMockDir() {
+  console.log('mockDir: ', mockDir);
   if (!fs.existsSync(mockDir)) {
     fs.mkdirSync(mockDir, { recursive: true });
     console.log('Created mock directory:', mockDir);
@@ -75,10 +77,8 @@ function watch() {
   }
 }
 
-if (require.main === module) {
-  const args = process.argv.slice(2);
-  const runWatch = args.includes('--watch') || args.includes('-w');
-  ensureMockDir();
-  if (runWatch) watch();
-  else writeIndex();
-}
+const args = process.argv.slice(2);
+const runWatch = args.includes('--watch') || args.includes('-w');
+ensureMockDir();
+if (runWatch) watch();
+else writeIndex();

@@ -15,6 +15,11 @@ export default defineConfig({
   server: {
     port: 3004,
   },
+  resolve: {
+    alias: {
+      '@': pathSrc,
+    },
+  },
   plugins: [
     VueRouter({
       /* options */

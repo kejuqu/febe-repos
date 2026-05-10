@@ -21,7 +21,7 @@ Mock.mock('/api/products', 'post', (options: any) => {
   const data = Mock.mock({
     'data|10': [
       {
-        'id|+1': 1,
+        id: '@id',
         name: '@ctitle(2, 4)', // 商品名称
         desc: '@cparagraph(1, 2)', // 商品描述
         category: '@pick(["水果", "蔬菜", "肉类", "海鲜", "零食"])', // 种类
